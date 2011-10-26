@@ -20,6 +20,10 @@ module SessionsHelper
    user == current_user
   end
 
+	 def authenticate
+    deny_access unless signed_in?
+  end
+
  def signed_in?
     !current_user.nil?
   end

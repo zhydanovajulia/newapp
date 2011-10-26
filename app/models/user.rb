@@ -13,7 +13,7 @@ class User < ActiveRecord::Base
  attr_accessor :password	
  attr_accessible :name, :email, :password, :password_confirmation
 	email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-
+    has_many :microposts,:dependent => :destroy
 
 	validates :name, :presence => true,
 					 :length   => { :maximum => 50 }
@@ -29,7 +29,10 @@ class User < ActiveRecord::Base
 	before_save :encrypt_password
 	# Return true if the user's password matches the submitted password.
   
-  
+  def feed
+    # This is preliminary. See Глава 12 for the full implementation.
+    Micropost.where("user_id = ?", id)
+  end
 
   def self.authenticate(email, submitted_password)
     user = find_by_email(email)
